@@ -8,7 +8,7 @@ A fast reader for scaler channels for TDMS files.
 
 ## Usage
 
-    python3 tdms_scaler_reader.py -c 5 -o . -n example ./PATH/TO/SCALER/DATA
+    python3 tdms_scaler_reader.py -c 5 -o . -n example ./PATH/TO/SCALER/DATA/*.tdms
 
 Options:
 
