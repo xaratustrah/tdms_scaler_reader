@@ -57,7 +57,7 @@ so you shift the original array by -3, subtract from itself:
 
 
 | Index | Shifted Array Values | Array Values |  Diference  |
-|-------|----------------------|--------------|-------------|
+|:-----:|:--------------------:|:------------:|:-----------:|
 |   0   |           3          |       2      |      1      |
 |   1   |           4          |       1      |      3      |
 |   2   |           7          |       2      |      5      |
