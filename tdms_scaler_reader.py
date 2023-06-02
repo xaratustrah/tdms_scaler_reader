@@ -5,6 +5,7 @@
 Reading scalar channels in TDMS files
 
 2023 Xaratustrah
+Jun 2023 David
 '''
 
 import numpy as np
@@ -23,7 +24,10 @@ def read_tdms_scaler(filename, channel=5):
     n=1024
     delta_cnt = (b[(n-1):] - b[:-(n-1)])[::n]
     delta_t = np.diff(timestamp_channel[:]) / np.timedelta64(1, 's')
-    return timestamp_channel[0:-1], delta_cnt[0:-1] / delta_t
+    try:
+        return timestamp_channel[0:-1], delta_cnt[0:-1] / delta_t
+    except ValueError: #operands could not be broadcast together with shapes (249,) (250,), when file is not "complete" 
+        return timestamp_channel[0:-1], delta_cnt[:] / delta_t
 
 
 def main():
