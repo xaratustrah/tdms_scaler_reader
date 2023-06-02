@@ -56,7 +56,7 @@ These are 12 values, i.e. indexes from 0 to 11. You are interested in getting a 
 so you shift the original array by -3, subtract from itself:
 
 
-| Index | Shifted Array Values | Array Values |  Diference  |
+| Index | Shifted Array Values | Array Values |  Difference |
 |:-----:|:--------------------:|:------------:|:-----------:|
 |   0   |           3          |       2      |      1      |
 |   1   |           4          |       1      |      3      |
@@ -85,4 +85,4 @@ Visually:
    |-------|    (difference)
    x   x   x    (values taken at indexes: 0,4,8)
 ```   
-In the case of TDMS scaler files we do the same. Since we have a time stamp and 1024 count points follow. So in case of 256 time stamps. `delta_t` is calculated using `np.diff` directly, since `TimeDelta64` elements are adjacent. In between those time stamps, the counter counts up, every time there is a pulse on the scaler. So to determine the number of counts in each section, the count difference between the value directly on top of the time stamp, and the last value just before the next time stamp. e.g.: value at index 1023 - value at index 0, value at index 2047 - value at index 1024 and so on. This is achieved by the method above for `delta_cnt` and results again in 256 values. Then `delta_cnt / delta_t` gives us a value in frequency `[Hz]`. The time stamp values are aligned to the left of 1024 data points, so the last bin must be left out.
+In the case of our TDMS scaler files we do the same. Since we have 262144 kicker values and 256 time stamps, we have 1024 count points. In other words, we have a sampling time of the kicker signal of almost 1 ms, which means that the standard deviation of the mapping between time stamp and kicker signal is of 1 seconds by using this method. So in case of 256 time stamps. `delta_t` is calculated using `np.diff` directly, since `TimeDelta64` elements are adjacent. In between those time stamps, the counter counts up, every time there is a pulse on the scaler. So to determine the number of counts in each section, the count difference between the value directly on top of the time stamp, and the last value just before the next time stamp. e.g.: value at index 1023 - value at index 0, value at index 2047 - value at index 1024 and so on. This is achieved by the method above for `delta_cnt` and results again in 256 values. Then `delta_cnt / delta_t` gives us a value in frequency `[Hz]`. The time stamp values are aligned to the left of 1024 data points, so the last bin must be left out.
