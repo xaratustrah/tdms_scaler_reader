@@ -32,7 +32,7 @@ Creating difference between adjacent elements are done using `np.diff`. But, how
 Imagine you have the array and the indexs of it:
 
 | Index | Array Values |
-|-------|-------------|
+|:-----:|:-----------:|
 |   0   |      2      |
 |   1   |      1      |
 |   2   |      2      |
