@@ -34,7 +34,7 @@ def kicker_times(filename, fs = 1024): # kicker_time != injection time ?
     kicker_channel = tdms_file['SCData'][f'CHANNEL_04'][:]
     initial_timestamp = tdms_file['SCTimestamps']['TimeStamp'][0]
     jump = np.where(np.diff(kicker_channel) == 1)[0]
-    kicker_times = initial_timestamp + np.timedelta64(int((jump+1)/fs*1e9),'ns')
+    kicker_times = [initial_timestamp + np.timedelta64(int((index+1)/fs*1e9),'ns') for index in jump]
     return kicker_times
 
 def print_tdms_info(file_path): #Of iq.tdms and iq.tdms_info
