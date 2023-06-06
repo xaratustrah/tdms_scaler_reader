@@ -38,16 +38,15 @@ def kicker_times(filename, fs = 1024): # kicker_time != injection time ?
     return kicker_times
 
 def print_tdms_info(file_path): #Of iq.tdms and iq.tdms_info
+    logger.add(sys.stdout, level='INFO')
     with TdmsFile.open(file_path) as tdms_file:
         for group in tdms_file.groups():
-            print("Group:", group.name)
+            logger.info(f'Group name: {group.name}')
             for channel in group.channels():
-                print('***********************')
-                print('Channel:', channel.name)
-                print('Data Type:', channel.data_type)
-                print('Data Length:', len(channel))
-                print('Data:', channel[:])
-                print('***********************')
+                logger.info(f'Channel name: {channel.name}')
+                logger.info(f'Data Type: {channel.data_type}')
+                logger.info(f'Data Length: {len(channel)}')
+                logger.info(f'Data: {channel[:]}')
 
 def main():
    
