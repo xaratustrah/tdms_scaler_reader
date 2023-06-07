@@ -5,6 +5,7 @@
 Reading scalar channels in TDMS files
 
 2023 Xaratustrah
+Jun 2023 David
 '''
 
 import numpy as np
@@ -23,8 +24,29 @@ def read_tdms_scaler(filename, channel=5):
     n=1024
     delta_cnt = (b[(n-1):] - b[:-(n-1)])[::n]
     delta_t = np.diff(timestamp_channel[:]) / np.timedelta64(1, 's')
-    return timestamp_channel[0:-1], delta_cnt[0:-1] / delta_t
+    try:
+        return timestamp_channel[0:-1], delta_cnt[0:-1] / delta_t
+    except ValueError: #operands could not be broadcast together with shapes (249,) (250,), when file is not "complete" 
+        return timestamp_channel[0:-1], delta_cnt[:] / delta_t
+    
+def kicker_times(filename, fs = 1024): # kicker_time != injection time ?
+    tdms_file = TdmsFile.read(filename)
+    kicker_channel = tdms_file['SCData'][f'CHANNEL_04'][:]
+    initial_timestamp = tdms_file['SCTimestamps']['TimeStamp'][0]
+    jump = np.where(np.diff(kicker_channel) == 1)[0]
+    kicker_times = [initial_timestamp + np.timedelta64(int((index+1)/fs*1e9),'ns') for index in jump]
+    return kicker_times
 
+def print_tdms_info(file_path): #Of iq.tdms and iq.tdms_info
+    logger.add(sys.stdout, level='INFO')
+    with TdmsFile.open(file_path) as tdms_file:
+        for group in tdms_file.groups():
+            logger.info(f'Group name: {group.name}')
+            for channel in group.channels():
+                logger.info(f'Channel name: {channel.name}')
+                logger.info(f'Data Type: {channel.data_type}')
+                logger.info(f'Data Length: {len(channel)}')
+                logger.info(f'Data: {channel[:]}')
 
 def main():
    
